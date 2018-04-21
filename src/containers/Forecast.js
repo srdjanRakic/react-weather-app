@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { getForecast } from '../utils/api';
 import queryString from 'query-string';
 import DayItem from '../components/DayItem';
-import { getDate } from '../utils/helpers';
+import { getDate, getDay } from '../utils/helpers';
 import ForecastContainer from "../styled-components/ForecastContainer";
 
 class Forecast extends Component {
@@ -56,25 +56,26 @@ class Forecast extends Component {
             <div id="top">
               <div className="location">{city.name}</div>
               <div className="time">{getDate(list[0].dt)}</div>
-              <div className="status">Cloudy</div>
+              <div className="status">{list[0].weather[0].main}</div>
             </div>
             <div id="left-information">
-              <img src={require(`../images/weather-icons/${list[0].weather[0].icon}.svg`)} alt='Weather' />
+              <img style={{ height: 64, width: 80 , padding: 10 }} src={require(`../images/weather-icons/${list[0].weather[0].icon}.svg`)} alt='Weather' />
               <div className="temperature">{list[0].temp.max}</div>
               <div className="unit">°C</div>
             </div>
             <div id="right-information">
-              <span>Humidity: {list[0].humidity} %</span><br/>
-              <span>Pressure: {list[0].pressure} mb</span><br/>
-              <span>Wind speed: {list[0].pressure} km/h</span>
+              <span>Morning: {list[0].temp.morn} °C</span><br/>
+              <span>Day: {list[0].temp.day} °C</span><br/>
+              <span>Evening: {list[0].temp.eve} °C</span><br/>
+              <span>Night:{list[0].temp.night} °C</span>
             </div>
             <div id="forecast">
               <ul>
                 {list.map((listItem, i) =>
                     <li key={i} onClick={() => this.handleClick(listItem)}>
-                      <h2 className='subheader'>{getDate(listItem.dt)}</h2>
-                      <img src={require(`../images/weather-icons/${listItem.weather[0].icon}.svg`)} alt='Weather' />
-                      <b>{ listItem.temp.max }°</b>
+                      <div>{getDay(listItem.dt)}</div> <br/>
+                      <img style={{ height: 25, width: 25 , padding: 5 }} src={require(`../images/weather-icons/${listItem.weather[0].icon}.svg`)} alt='Weather' /> <br/>
+                      <span>{ listItem.temp.max }°</span>
                     </li>
                   //  <DayItem onClick={() => this.handleClick(listItem)} key={listItem.dt} day={listItem} />
                 )}

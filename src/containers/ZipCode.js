@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Card from "../styled-components/Card";
 import LocationInput from "../styled-components/LocationInput";
+import BorderlessTextInput from "../styled-components/BorderlessTextInput";
 
 class ZipCode extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class ZipCode extends React.Component {
     })
   }
   handleUpdateZipcode = (e) => {
-    var zip = e.target.value;
+    let zip = e.target.value;
     this.setState(function () {
       return {
         zipcode: zip
@@ -31,13 +32,12 @@ class ZipCode extends React.Component {
     return (
       <Card style={{flexDirection: this.props.direction}}>
           <LocationInput
-            className="ghost-input"
             onChange={this.handleUpdateZipcode}
             placeholder='City'
             type='text'
             value={this.state.zipcode} />
             <p>or</p>
-            <p>use my current location</p>
+            <p>use my <a href="">current location</a></p>
             <button
               type='button'
               className='ghost-button'

@@ -8,7 +8,6 @@ const LocationInput = styled.input`
     font-size: 25px;
     border: 0px;
     outline: none;
-    width: 100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -22,6 +21,10 @@ const LocationInput = styled.input`
     -ms-transition: all 0.1s ease-in-out;
     -o-transition: all 0.1s ease-in-out;
     transition: all 0.1s ease-in-out;
+
+    :focus {
+        border-bottom: 1px solid #ddd;
+    }
 `;
 
 export default LocationInput;

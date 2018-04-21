@@ -19,11 +19,6 @@ body {
   font-weight: 100;
   text-align: center;
 }
-.subheader {
-  font-size: 30px;
-  color: #333;
-  font-weight: 100;
-}
 .weather {
   height: 130px;
 }
@@ -34,9 +29,7 @@ body {
   margin: 0 auto;
   text-align: center;
 }
-.ghost-input:focus {
-  border-bottom: 1px solid #ddd;
-}
+
 .ghost-button {
   background-color: transparent;
   border: 2px solid #ddd;
@@ -78,6 +71,7 @@ body {
 }
 #left-information {
   color: #212121;
+  float: left;
 }
 #left-information .thumbnail {
   float: left;

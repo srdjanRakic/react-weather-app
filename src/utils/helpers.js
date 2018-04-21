@@ -1,11 +1,11 @@
 const daysMap = {
-  "0":"Sunday",
-  "1":"Monday",
-  "2":"Tuesday",
-  "3":"Wednesday",
-  "4":"Thursday",
-  "5":"Friday",
-  "6":"Saturday"
+  "0":"Sun",
+  "1":"Mon",
+  "2":"Tue",
+  "3":"Wed",
+  "4":"Thu",
+  "5":"Fri",
+  "6":"Sat"
 };
 
 const monthsMap = {
@@ -23,13 +23,19 @@ const monthsMap = {
   "11":"Dec"
 };
 
-export function convertTemp (kelvin) {
+export function convertTemp(kelvin) {
   return parseInt(((kelvin - 273.15)* 1.8000 + 32.00), 10)
 }
 
-export function getDate (unixTimestmap) {
+export function getDate(unixTimestmap) {
   let date = new Date(unixTimestmap * 1000);
-  let day = daysMap[date.getDay()]
+  let day = daysMap[date.getDay()];
   let month = monthsMap[date.getMonth()] + ' ' + date.getDate();
-  return day + ', ' + month;
+  return `${day}, ${month}, ${date.getFullYear()}`;
+}
+
+export function getDay(unixTimestmap) {
+  let date = new Date(unixTimestmap * 1000);
+  let day = daysMap[date.getDay()];
+  return day;
 }
