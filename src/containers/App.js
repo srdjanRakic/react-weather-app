@@ -1,17 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ZipCode from './ZipCode';
 import Forecast from './Forecast';
-import Detail from './Detail';
+import Details from '../components/Details';
 import Container from "../styled-components/Container";
 import ContentWrapper from "../styled-components/ContentWrapper";
-var ReactRouter = require('react-router-dom');
-var BrowserRouter = ReactRouter.BrowserRouter;
-var Route = ReactRouter.Route;
+import { Route } from 'react-router-dom';
+import Routes from '../Routes';
 
-class App extends React.Component {
+class App extends Component {
   render () {
     return (
-      <BrowserRouter>
         <Container>
           <Route exact path='/' render={function (props) {
             return (
@@ -30,11 +28,10 @@ class App extends React.Component {
           }} />
 
           <Route path='/forecast' component={Forecast} />
-          <Route path='/details/:city' component={Detail} />
+          <Route path='/details/:city' component={Details} />
         </Container>
-      </BrowserRouter>
     )
   }
 }
 
-module.exports = App;
+export default App;
