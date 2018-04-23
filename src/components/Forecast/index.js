@@ -43,27 +43,24 @@ class Forecast extends Component {
         this.makeRequest(this.city);
     }
     makeRequest = city => {
-        this.setState(function() {
+        this.setState(() => {
             return {
                 loading: true,
             };
         });
 
-        getForecast(city).then(
-            function(res) {
-                this.setState(function() {
-                    return {
-                        loading: false,
-                        forecastData: res,
-                    };
-                });
-            }.bind(this)
-        );
+        getForecast(city).then(res => {
+            this.setState(() => {
+                return {
+                    loading: false,
+                    forecastData: res,
+                };
+            });
+        });
     };
     handleClick = city => {
-        city.city = this.city;
         this.props.history.push({
-            pathname: '/details/' + this.city,
+            pathname: '/details/' + city,
             state: city,
         });
     };
