@@ -4,6 +4,13 @@ import { getDate, getDay } from '../../utils/helpers';
 import queryString from 'query-string';
 import DayItem from '../DayItem';
 import {
+    MetricSlider,
+    Input,
+    Metrics,
+    ForecastGeneralInfo,
+    ForecastStatus,
+    ForecastLocation,
+    ForecastDate,
     ForecastContainer,
     ForecastCard,
     ExtendedForecast,
@@ -24,7 +31,7 @@ class Forecast extends Component {
             forecastData: [],
             loading: true,
             isChecked: true,
-            metric: 'C',
+            temperatureUnit: '°C',
         };
     }
     componentDidMount() {
@@ -65,12 +72,12 @@ class Forecast extends Component {
         this.setState(function() {
             return {
                 isChecked: !this.state.isChecked,
-                metric: this.state.isChecked ? 'C' : 'F',
+                temperatureUnit: this.state.isChecked ? '°F' : '°C',
             };
         });
     }
     render() {
-        const { isChecked, metric } = this.state;
+        const { isChecked, temperatureUnit } = this.state;
         const { city, list } = this.state.forecastData;
         const today = list ? list[0] : null;
 
@@ -79,14 +86,22 @@ class Forecast extends Component {
         ) : (
             <ForecastContainer>
                 <ForecastCard>
-                    {/* <CheckboxSlider handleChange={() => this.handleChange} isChecked={isChecked ? 1 : 0} metric={metric}/> */}
-                    <div id="top">
-                        <div className="location">
+                    <ForecastGeneralInfo>
+                        <MetricSlider>
+                            <Input
+                                type="checkbox"
+                                onChange={() => this.handleChange()}
+                            />
+                            <Metrics isChecked={isChecked}>
+                                {temperatureUnit}
+                            </Metrics>
+                        </MetricSlider>
+                        <ForecastLocation>
                             <StyledLink to="/">&larr;</StyledLink> {city.name}
-                        </div>
-                        <div className="time">{getDate(today.dt)}</div>
-                        <div className="status">{today.weather[0].main}</div>
-                    </div>
+                        </ForecastLocation>
+                        <ForecastDate>{getDate(today.dt)}</ForecastDate>
+                        <ForecastStatus>{today.weather[0].main}</ForecastStatus>
+                    </ForecastGeneralInfo>
                     <ForecastTodaysTemperature>
                         <ForecastThumbnail
                             src={require(`../../images/weather-icons/${
@@ -100,13 +115,21 @@ class Forecast extends Component {
                         <ForecastTemperatureUnit>°C</ForecastTemperatureUnit>
                     </ForecastTodaysTemperature>
                     <ForecastPeriodOfDayInfo>
-                        <span>Morning: {today.temp.morn} °C</span>
+                        <span>
+                            Morning: {today.temp.morn} {temperatureUnit}
+                        </span>
                         <br />
-                        <span>Day: {today.temp.day} °C</span>
+                        <span>
+                            Day: {today.temp.day} {temperatureUnit}
+                        </span>
                         <br />
-                        <span>Evening: {today.temp.eve} °C</span>
+                        <span>
+                            Evening: {today.temp.eve} {temperatureUnit}
+                        </span>
                         <br />
-                        <span>Night:{today.temp.night} °C</span>
+                        <span>
+                            Night:{today.temp.night} {temperatureUnit}
+                        </span>
                     </ForecastPeriodOfDayInfo>
 
                     <ExtendedForecast>
@@ -132,7 +155,10 @@ class Forecast extends Component {
                                             alt="Weather"
                                         />{' '}
                                         <br />
-                                        <span>{listItem.temp.max}°</span>
+                                        <span>
+                                            {listItem.temp.max}{' '}
+                                            {temperatureUnit}
+                                        </span>
                                     </ExtendedForecastDay>
                                 )
                                 //  <DayItem onClick={() => this.handleClick(listItem)} key={listItem.dt} day={listItem} />

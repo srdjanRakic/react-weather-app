@@ -14,13 +14,34 @@ export const Card = styled.div`
     text-align: center;
 `;
 
-export const Switch = styled.input`
+export const ForecastGeneralInfo = styled.div`
+    margin-bottom: 20px;
+`;
+
+export const ForecastLocation = styled.div`
+    font-size: 24px;
+    line-height: 1.2;
+`;
+
+export const ForecastDate = styled.div`
+    font-size: 16px;
+    line-height: 2;
+`;
+
+export const ForecastStatus = styled.div`
+    font-size: 13px;
+    line-height: 1.4;
+`;
+
+export const MetricSlider = styled.label`
     position: relative;
     display: inline-block;
     width: 40px;
     height: 20px;
     border-radius: 25px;
-    background-color: #989898;
+    background-color: #ffffff;
+    border: 1px solid black;
+    float: right;
 `;
 
 export const Input = styled.input`
@@ -31,14 +52,11 @@ export const Metrics = styled.div`
     position: absolute;
     border-radius: 50%;
     transition: 0.1s ease;
-
     width: 18px;
     height: 18px;
     top: 1px;
-    left: 1px;
-
-    left: ${props => (props.isChecked ? '50%' : '0')};
-    background-color: ${props => (props.isChecked ? '#bababa' : '#ea352d')};
+    left: ${props => (props.isChecked ? '50%' : '1px')};
+    text-align: center;
 `;
 
 export const ForecastContainer = styled.div`
@@ -82,7 +100,6 @@ export const ForecastThumbnail = styled.img`
     height: 64px;
     width: 80px;
     padding: 5px;
-    fill: #e59483;
 `;
 
 export const ForecastPeriodOfDayInfo = styled.div`

@@ -47,19 +47,3 @@ body {
 .ghost-button:hover {
     border: 2px solid #515151;
 }
-
-#top {
-    margin-bottom: 20px;
-}
-#top .location {
-    font-size: 24px;
-    line-height: 1.2;
-}
-#top .time {
-    font-size: 16px;
-    line-height: 2;
-}
-#top .status {
-    font-size: 13px;
-    line-height: 1.4;
-}
