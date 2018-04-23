@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const NotFound = styled.div`
     padding-top: 100px;

@@ -6,12 +6,12 @@ import Loading from './components/Loading';
 import Loadable from 'react-loadable';
 
 const AsyncHome = Loadable({
-    loader: () => import('./containers/App'),
+    loader: () => import('./components/Home'),
     loading: Loading,
 });
 
 const AsyncForecast = Loadable({
-    loader: () => import('./containers/Forecast'),
+    loader: () => import('./components/Forecast'),
     loading: Loading,
 });
 
@@ -24,20 +24,15 @@ const AsyncNotFound = asyncComponent(() => import('./components/NotFound'));
 
 export default ({ childProps }) => (
     <Switch>
+        <AppliedRoute path="/" exact component={AsyncHome} props={childProps} />
         <AppliedRoute
-            path="/"
-            exact
-            component={AsyncHome}
-            props={childProps}
-        />
-        <AppliedRoute
-            path='/forecast'
+            path="/forecast"
             exact
             component={AsyncForecast}
             props={childProps}
         />
         <AppliedRoute
-            path='/details/:city'
+            path="/details/:city"
             exact
             component={AsyncDetails}
             props={childProps}

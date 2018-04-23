@@ -1,5 +1,5 @@
 import React from 'react';
-import NotFound from "../styled-components/NotFound";
+import NotFound from './styled';
 
 export default () => (
     <NotFound>

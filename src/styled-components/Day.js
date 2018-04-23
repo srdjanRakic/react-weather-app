@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-const Container = styled.div`
-    height: 100%;
-    width: 100%;
-    background: #FC816D;
+const Day = styled.div`
+  height: 100%;
+  width: 100%;
+  background: #fc816d;
 `;
 
-export default Container;
+export default Day;
