@@ -103,7 +103,6 @@ export const ForecastThumbnail = styled.img`
 `;
 
 export const ForecastPeriodOfDayInfo = styled.div`
-    float: right;
     padding-left: 5px;
     line-height: 22px;
     padding-top: 2px;
