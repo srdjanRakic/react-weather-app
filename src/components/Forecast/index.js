@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { getForecast } from '../../utils/api';
-import { getDate, getDay } from '../../utils/helpers';
+import { getFullDate, getDay, convertTemp } from '../../utils/helpers';
 import queryString from 'query-string';
-import DayItem from '../DayItem';
+import Loading from '../Loading';
 import {
     MetricSlider,
     Input,
@@ -17,7 +17,7 @@ import {
     ForecastPeriodOfDayInfo,
     ForecastTodaysTemperature,
     ExtendedForecastList,
-    ExtendedForecastDay,
+    ExtendedForecastItem,
     ForecastTemperatureUnit,
     ForecastThumbnail,
 } from './styled';
@@ -48,7 +48,6 @@ class Forecast extends Component {
                 loading: true,
             };
         });
-
         getForecast(city).then(res => {
             this.setState(() => {
                 return {
@@ -65,21 +64,21 @@ class Forecast extends Component {
         });
     };
     handleChange() {
-        console.log('fireee');
-        this.setState(function() {
+        this.setState(() => {
             return {
                 isChecked: !this.state.isChecked,
                 temperatureUnit: this.state.isChecked ? '°F' : '°C',
             };
         });
     }
+
     render() {
         const { isChecked, temperatureUnit } = this.state;
         const { city, list } = this.state.forecastData;
         const today = list ? list[0] : null;
 
         return this.state.loading ? (
-            <h1 className="forecast-header">Loading</h1>
+            <Loading />
         ) : (
             <ForecastContainer>
                 <ForecastCard>
@@ -96,50 +95,65 @@ class Forecast extends Component {
                         <ForecastLocation>
                             <StyledLink to="/">&larr;</StyledLink> {city.name}
                         </ForecastLocation>
-                        <ForecastDate>{getDate(today.dt)}</ForecastDate>
+                        <ForecastDate>{getFullDate(today.dt)}</ForecastDate>
                         <ForecastStatus>{today.weather[0].main}</ForecastStatus>
                     </ForecastGeneralInfo>
-                    <ForecastTodaysTemperature>
-                        <ForecastThumbnail
-                            src={require(`../../images/weather-icons/${
-                                today.weather[0].icon
-                            }.svg`)}
-                            alt="Weather"
-                        />
+
+                    <div>
                         <ForecastTodaysTemperature>
-                            {today.temp.max}
+                            <ForecastThumbnail
+                                src={require(`../../images/weather-icons/${
+                                    today.weather[0].icon
+                                }.svg`)}
+                                alt="Weather"
+                            />
+                            <ForecastTodaysTemperature>
+                                {today.temp.max}
+                            </ForecastTodaysTemperature>
+                            <ForecastTemperatureUnit>
+                                {temperatureUnit}
+                            </ForecastTemperatureUnit>
                         </ForecastTodaysTemperature>
-                        <ForecastTemperatureUnit>°C</ForecastTemperatureUnit>
-                    </ForecastTodaysTemperature>
-                    <ForecastPeriodOfDayInfo>
-                        <span>
-                            Morning: {today.temp.morn} {temperatureUnit}
-                        </span>
-                        <br />
-                        <span>
-                            Day: {today.temp.day} {temperatureUnit}
-                        </span>
-                        <br />
-                        <span>
-                            Evening: {today.temp.eve} {temperatureUnit}
-                        </span>
-                        <br />
-                        <span>
-                            Night:{today.temp.night} {temperatureUnit}
-                        </span>
-                    </ForecastPeriodOfDayInfo>
+                        <ForecastPeriodOfDayInfo>
+                            <span>
+                                Morning:{' '}
+                                {convertTemp(temperatureUnit, today.temp.morn)}{' '}
+                                {temperatureUnit}
+                            </span>
+                            <br />
+                            <span>
+                                Day:{' '}
+                                {convertTemp(temperatureUnit, today.temp.day)}{' '}
+                                {temperatureUnit}
+                            </span>
+                            <br />
+                            <span>
+                                Evening:{' '}
+                                {convertTemp(temperatureUnit, today.temp.eve)}{' '}
+                                {temperatureUnit}
+                            </span>
+                            <br />
+                            <span>
+                                Night:{convertTemp(
+                                    temperatureUnit,
+                                    today.temp.night
+                                )}{' '}
+                                {temperatureUnit}
+                            </span>
+                        </ForecastPeriodOfDayInfo>
+                    </div>
 
                     <ExtendedForecast>
                         <ExtendedForecastList>
                             {list.map(
                                 (listItem, i) => (
-                                    <ExtendedForecastDay
+                                    <ExtendedForecastItem
                                         key={i}
                                         onClick={() =>
                                             this.handleClick(listItem)
                                         }
                                     >
-                                        <div>{getDay(listItem.dt)}</div> <br />
+                                        <div>{getDay(listItem.dt)}</div>
                                         <img
                                             style={{
                                                 height: 25,
@@ -156,7 +170,7 @@ class Forecast extends Component {
                                             {listItem.temp.max}{' '}
                                             {temperatureUnit}
                                         </span>
-                                    </ExtendedForecastDay>
+                                    </ExtendedForecastItem>
                                 )
                                 //  <DayItem onClick={() => this.handleClick(listItem)} key={listItem.dt} day={listItem} />
                             )}

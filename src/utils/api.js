@@ -21,13 +21,6 @@ export function getQueryStringData(city) {
     };
 }
 
-export function getCurrentWeather(city) {
-    let queryStringData = getQueryStringData(city);
-    let url = prepUrl('weather', queryStringData);
-
-    return axios.get(url).then(currentWeatherData => currentWeatherData.data);
-}
-
 export function getForecast(city) {
     let queryStringData = getQueryStringData(city);
     let url = prepUrl('forecast/daily', queryStringData);

@@ -15,11 +15,6 @@ const AsyncForecast = Loadable({
     loading: Loading,
 });
 
-const AsyncDetails = Loadable({
-    loader: () => import('./components/Details'),
-    loading: Loading,
-});
-
 const AsyncNotFound = asyncComponent(() => import('./components/NotFound'));
 
 export default ({ childProps }) => (
@@ -29,12 +24,6 @@ export default ({ childProps }) => (
             path="/forecast"
             exact
             component={AsyncForecast}
-            props={childProps}
-        />
-        <AppliedRoute
-            path="/details/:city"
-            exact
-            component={AsyncDetails}
             props={childProps}
         />
         {/* Finally, catch all unmatched routes */}

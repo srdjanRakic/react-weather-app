@@ -1,42 +1,55 @@
 import styled from 'styled-components';
+import FaSearch from 'react-icons/lib/fa/search';
 
-export const Card = styled.div`
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+export const LocationContainer = styled.div`
+    flex-direction: column;
+    box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     width: 40%;
+    height: 40%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 50;
-    width: 800px;
-    margin: 0 auto;
-    background: white;
+    background: #fff;
     text-align: center;
 `;
 
+export const LocationForm = styled.form`
+    position: relative;
+    border-bottom: 2px solid #4e5c5f;
+    margin: 15px 0px;
+`;
+
 export const LocationInput = styled.input`
+    width: 80%;
+    border: 0;
+    outline: 0;
+    background: transparent;
     text-align: center;
-    display: block;
     font-weight: 300;
-    width: 100%;
     font-size: 25px;
-    border: 0px;
-    outline: none;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    color: #4b545f;
-    background: #fff;
-    font-family: Open Sans, Verdana;
-    padding: 10px 15px;
-    margin: 30px 0px;
     -webkit-transition: all 0.1s ease-in-out;
     -moz-transition: all 0.1s ease-in-out;
     -ms-transition: all 0.1s ease-in-out;
     -o-transition: all 0.1s ease-in-out;
     transition: all 0.1s ease-in-out;
+`;
 
-    :focus {
-        border-bottom: 1px solid #ddd;
-    }
+export const SearchIcon = styled(FaSearch)`
+    right: 1px;
+    position: absolute;
+    top: 10px;
+    pointer-events: none;
+`;
+
+export const ButtonAsLink = styled.button`
+    color: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: underline dashed #4e5c5f;
+    cursor: pointer;
 `;
