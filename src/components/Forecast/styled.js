@@ -90,23 +90,20 @@ export const ForecastTemperatureUnit = styled.div`
 
 export const ForecastTodaysTemperature = styled.div`
     float: left;
-    margin-top: -3px;
-    padding-left: 10px;
-    font-size: 64px;
+    font-size: 74px;
     color: #e59483;
 `;
 
 export const ForecastThumbnail = styled.img`
-    height: 64px;
-    width: 80px;
+    height: 80px;
     padding: 5px;
 `;
 
 export const ForecastPeriodOfDayInfo = styled.div`
+    margin-left: 10px;
     padding-left: 5px;
-    line-height: 22px;
     padding-top: 2px;
-    min-width: 43%;
+    line-height: 22px;
     font-weight: lighter;
     color: #e59483;
 `;
@@ -121,7 +118,7 @@ export const ExtendedForecastList = styled.div`
     margin: 15px 0 5px 0;
 `;
 
-export const ExtendedForecastDay = styled.div`
+export const ExtendedForecastItem = styled.div`
     display: inline-block;
     height: 90px;
     width: 73px;

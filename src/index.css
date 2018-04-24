@@ -8,8 +8,9 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    color: #4e5c5f;
 }
-#root {
+#app {
     height: 100%;
     width: 100%;
 }
@@ -18,30 +19,4 @@ body {
     color: #333;
     font-weight: 100;
     text-align: center;
-}
-.weather {
-    height: 130px;
-}
-.description-container {
-    font-size: 34px;
-    font-weight: 100;
-    max-width: 400px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.ghost-button {
-    background-color: transparent;
-    border: 2px solid #ddd;
-    padding: 10px 30px;
-    width: 100%;
-    min-width: 350px;
-    -webkit-transition: all 0.1s ease-in-out;
-    -moz-transition: all 0.1s ease-in-out;
-    -ms-transition: all 0.1s ease-in-out;
-    -o-transition: all 0.1s ease-in-out;
-    transition: all 0.1s ease-in-out;
-}
-.ghost-button:hover {
-    border: 2px solid #515151;
 }
