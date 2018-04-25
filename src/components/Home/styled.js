@@ -46,6 +46,7 @@ export const SearchIcon = styled(FaSearch)`
 `;
 
 export const ButtonAsLink = styled.button`
+    font-size: inherit;
     color: inherit;
     background: none;
     border: none;
