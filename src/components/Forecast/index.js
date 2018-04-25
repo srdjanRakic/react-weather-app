@@ -5,7 +5,6 @@ import {
     convertTemp,
     mapTimeOfDay,
 } from '../../utils/helpers';
-import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import {
     TempUnitSlider,
@@ -137,7 +136,7 @@ class Forecast extends Component {
                         width: 25,
                         padding: 5,
                     }}
-                    src={require(`../../images/weather-icons/${
+                    src={require(`../../assets/img/weather-icons/${
                         listItem.weather[0].icon
                     }.svg`)}
                     alt="Weather"
@@ -220,7 +219,7 @@ class Forecast extends Component {
                     </ForecastGeneralInfo>
                     <ForecastTodaysTemperature>
                         <ForecastThumbnail
-                            src={require(`../../images/weather-icons/${
+                            src={require(`../../assets/img/weather-icons/${
                                 todayTempInfo.weather[0].icon
                             }.svg`)}
                             alt="Weather"

@@ -1,7 +1,6 @@
 import React from 'react';
-import Routes from '../routes';
-import Container from '../styled-components/Container';
-import ContentWrapper from '../styled-components/ContentWrapper';
+import Routes from '../../routes';
+import { Container, ContentWrapper } from './styled';
 
 const App = () => (
     <React.Fragment>
