@@ -8,6 +8,13 @@ const daysMap = {
     '6': 'Sat',
 };
 
+const timeOfTheDay = {
+    morn: 'Morning',
+    eve: 'Evening',
+    night: 'Night',
+    day: 'Day',
+};
+
 const monthsMap = {
     '0': 'Jan',
     '1': 'Feb',
@@ -24,19 +31,23 @@ const monthsMap = {
 };
 
 export function toCelsius(fahrenheit) {
-    return (fahrenheit - 32) * 5 / 9;
+    return Math.round((fahrenheit - 32) * 5 / 9);
 }
 
 export function toFahrenheit(celsius) {
-    return celsius * 9 / 5 + 32;
+    return Math.round(celsius * 9 / 5 + 32);
 }
 
 export function convertTemp(unit, temp) {
-    if (unit === '°C') {
+    if (unit === '°F') {
         return toFahrenheit(temp);
     }
 
     return toCelsius(temp);
+}
+
+export function mapTimeOfDay(value) {
+    return timeOfTheDay[value];
 }
 
 export function getFullDate(unixTimestmap) {
