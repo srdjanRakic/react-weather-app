@@ -33,7 +33,7 @@ export const ForecastStatus = styled.div`
     line-height: 1.4;
 `;
 
-export const MetricSlider = styled.label`
+export const TempUnitSlider = styled.label`
     position: relative;
     display: inline-block;
     width: 40px;
@@ -48,7 +48,7 @@ export const Input = styled.input`
     display: none;
 `;
 
-export const Metrics = styled.div`
+export const TempUnit = styled.div`
     position: absolute;
     border-radius: 50%;
     transition: 0.1s ease;
@@ -84,8 +84,6 @@ export const ForecastTodaysInfo = styled.div`
 
 export const ForecastTemperatureUnit = styled.div`
     float: left;
-    margin-top: 6px;
-    font-size: 20px;
 `;
 
 export const ForecastTodaysTemperature = styled.div`
@@ -96,7 +94,8 @@ export const ForecastTodaysTemperature = styled.div`
 
 export const ForecastThumbnail = styled.img`
     height: 80px;
-    padding: 5px;
+    padding-left: 22px;
+    padding-right: 22px;
 `;
 
 export const ForecastPeriodOfDayInfo = styled.div`
@@ -124,4 +123,9 @@ export const ExtendedForecastItem = styled.div`
     width: 73px;
     text-align: center;
     line-height: 1;
+`;
+
+export const CityNotFound = styled.div`
+    display: inline-block;
+    text-align: center;
 `;

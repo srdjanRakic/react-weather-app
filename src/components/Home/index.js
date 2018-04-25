@@ -19,7 +19,7 @@ class Home extends Component {
     handleSubmitCity = () => {
         this.props.history.push({
             pathname: '/forecast',
-            search: '?city=' + this.state.city,
+            search: `?city=${this.state.city}`,
         });
     };
     handleUpdateCity = e => {
@@ -31,10 +31,14 @@ class Home extends Component {
         });
     };
     getUserGeoLocation = () => {
-        console.log('entered!');
         navigator.geolocation.getCurrentPosition(
             position => {
-                console.log(position);
+                this.props.history.push({
+                    pathname: '/forecast',
+                    search: `?lat=${position.coords.latitude}&lon=${
+                        position.coords.longitude
+                    }`,
+                });
                 this.setState(() => {
                     return {
                         location: {
@@ -45,7 +49,6 @@ class Home extends Component {
                 });
             },
             error => {
-                // this.props.displayError('Error dectecting your location');
                 console.error(JSON.stringify(error));
             },
             { enableHighAccuracy: true, timeout: 30000, maximumAge: 27000 }

@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import { getForecast } from '../../utils/api';
-import { getFullDate, getDay, convertTemp } from '../../utils/helpers';
-import queryString from 'query-string';
-import Loading from '../Loading';
 import {
-    MetricSlider,
+    getFullDate,
+    getDay,
+    convertTemp,
+    mapTimeOfDay,
+} from '../../utils/helpers';
+import { Link } from 'react-router-dom';
+import queryString from 'query-string';
+import {
+    TempUnitSlider,
     Input,
-    Metrics,
+    TempUnit,
     ForecastGeneralInfo,
     ForecastStatus,
     ForecastLocation,
@@ -20,165 +24,237 @@ import {
     ExtendedForecastItem,
     ForecastTemperatureUnit,
     ForecastThumbnail,
+    CityNotFound,
 } from './styled';
-// import { CheckboxSlider } from '../styled';
+import FaHome from 'react-icons/lib/fa/home';
+import Spinner from '../shared/Spinner';
 import StyledLink from '../shared/StyledLink';
+import agent from '../../utils/agent';
 
 class Forecast extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            forecastData: [],
-            loading: true,
+            isLoading: true,
             isChecked: true,
             temperatureUnit: '°C',
+            cityInfo: '',
+            extendedForecastList: [],
+            forecastDataErrors: undefined,
         };
     }
     componentDidMount() {
-        this.city = queryString.parse(this.props.location.search).city;
-        this.makeRequest(this.city);
+        let city = queryString.parse(this.props.location.search).city;
+        let geoCode = queryString.parse(this.props.location.search);
+        const params = {
+            units: 'metric',
+            APPID: process.env.REACT_APP_OPEN_WEATHER_API_KEY,
+            cnt: 7,
+        };
+
+        if (city) {
+            params.q = city;
+            this.fetchForecast(params);
+        } else {
+            params.lat = geoCode.lat;
+            params.lon = geoCode.lon;
+            this.fetchForecast(params);
+        }
     }
     componentWillReceiveProps(nextProps) {
-        this.city = queryString.parse(nextProps.location.search).city;
-        this.makeRequest(this.city);
+        let geoCode = queryString.parse(this.props.location.search);
+        this.fetchForecast(geoCode);
     }
-    makeRequest = city => {
+
+    fetchForecast(params) {
         this.setState(() => {
             return {
-                loading: true,
+                isLoading: true,
+                forecastDataErrors: undefined,
             };
         });
-        getForecast(city).then(res => {
-            this.setState(() => {
-                return {
-                    loading: false,
-                    forecastData: res,
-                };
+
+        return agent.Forecast.get(params)
+            .then(forecastData =>
+                this.setState(() => {
+                    return {
+                        isLoading: false,
+                        cityInfo: forecastData.city,
+                        extendedForecastList: forecastData.list,
+                    };
+                })
+            )
+            .catch(err => {
+                this.setState(() => {
+                    return {
+                        forecastDataErrors: err.response && err.response.body,
+                    };
+                });
+            })
+            .finally(() => {
+                this.setState(() => {
+                    return {
+                        isLoading: false,
+                    };
+                });
             });
+    }
+
+    handleTempUnitChange() {
+        let { isChecked, temperatureUnit, extendedForecastList } = this.state;
+
+        isChecked = !isChecked;
+        temperatureUnit = isChecked ? '°C' : '°F';
+        extendedForecastList.map(day => {
+            for (let timeOfTheDay in day.temp) {
+                if (day.temp.hasOwnProperty(timeOfTheDay)) {
+                    day.temp[timeOfTheDay] = convertTemp(
+                        temperatureUnit,
+                        day.temp[timeOfTheDay]
+                    );
+                }
+            }
         });
-    };
-    handleClick = city => {
-        this.props.history.push({
-            pathname: '/details/' + city,
-            state: city,
-        });
-    };
-    handleChange() {
+
         this.setState(() => {
             return {
-                isChecked: !this.state.isChecked,
-                temperatureUnit: this.state.isChecked ? '°F' : '°C',
+                isChecked,
+                temperatureUnit,
+                extendedForecastList,
             };
         });
     }
 
-    render() {
-        const { isChecked, temperatureUnit } = this.state;
-        const { city, list } = this.state.forecastData;
-        const today = list ? list[0] : null;
+    renderExtendedForecast() {
+        const { temperatureUnit, extendedForecastList } = this.state;
 
-        return this.state.loading ? (
-            <Loading />
-        ) : (
+        return extendedForecastList.map((listItem, i) => (
+            <ExtendedForecastItem key={i}>
+                <div>{getDay(listItem.dt)}</div>
+                <img
+                    style={{
+                        height: 25,
+                        width: 25,
+                        padding: 5,
+                    }}
+                    src={require(`../../images/weather-icons/${
+                        listItem.weather[0].icon
+                    }.svg`)}
+                    alt="Weather"
+                />{' '}
+                <br />
+                <span>
+                    {Math.round(listItem.temp.max)} {temperatureUnit}
+                </span>
+            </ExtendedForecastItem>
+        ));
+    }
+
+    renderTodaysTempInfo() {
+        const { temperatureUnit, extendedForecastList } = this.state;
+        // the first value of the list is todays temp info
+        const todayTempInfo = extendedForecastList[0].temp || null;
+
+        return Object.entries(todayTempInfo).map(([key, value]) => {
+            if (
+                key === 'morn' ||
+                key === 'day' ||
+                key === 'night' ||
+                key === 'eve'
+            ) {
+                return (
+                    <div key={key}>
+                        {mapTimeOfDay(key)}: {Math.round(value)}
+                        {temperatureUnit}
+                    </div>
+                );
+            }
+        });
+    }
+
+    renderError = () => (
+        <CityNotFound>
+            <h1>{this.state.forecastDataErrors.message}</h1>
+            <StyledLink to="/">
+                <span>
+                    Back to home <FaHome />
+                </span>
+            </StyledLink>
+        </CityNotFound>
+    );
+
+    renderForecastData = () => {
+        const {
+            isChecked,
+            temperatureUnit,
+            cityInfo,
+            extendedForecastList,
+        } = this.state;
+
+        // the first value of the list is todays temp info
+        const todayTempInfo = extendedForecastList[0] || null;
+
+        return (
             <ForecastContainer>
                 <ForecastCard>
                     <ForecastGeneralInfo>
-                        <MetricSlider>
+                        <TempUnitSlider>
                             <Input
                                 type="checkbox"
-                                onChange={() => this.handleChange()}
+                                onChange={() => this.handleTempUnitChange()}
                             />
-                            <Metrics isChecked={isChecked}>
+                            <TempUnit isChecked={isChecked}>
                                 {temperatureUnit}
-                            </Metrics>
-                        </MetricSlider>
+                            </TempUnit>
+                        </TempUnitSlider>
                         <ForecastLocation>
-                            <StyledLink to="/">&larr;</StyledLink> {city.name}
+                            <StyledLink to="/">&larr;</StyledLink>{' '}
+                            {cityInfo.name}
                         </ForecastLocation>
-                        <ForecastDate>{getFullDate(today.dt)}</ForecastDate>
-                        <ForecastStatus>{today.weather[0].main}</ForecastStatus>
+                        <ForecastDate>
+                            {getFullDate(todayTempInfo.dt)}
+                        </ForecastDate>
+                        <ForecastStatus>
+                            {todayTempInfo.weather[0].main}
+                        </ForecastStatus>
                     </ForecastGeneralInfo>
-
-                    <div>
+                    <ForecastTodaysTemperature>
+                        <ForecastThumbnail
+                            src={require(`../../images/weather-icons/${
+                                todayTempInfo.weather[0].icon
+                            }.svg`)}
+                            alt="Weather"
+                        />
                         <ForecastTodaysTemperature>
-                            <ForecastThumbnail
-                                src={require(`../../images/weather-icons/${
-                                    today.weather[0].icon
-                                }.svg`)}
-                                alt="Weather"
-                            />
-                            <ForecastTodaysTemperature>
-                                {today.temp.max}
-                            </ForecastTodaysTemperature>
-                            <ForecastTemperatureUnit>
-                                {temperatureUnit}
-                            </ForecastTemperatureUnit>
+                            {Math.round(todayTempInfo.temp.max)}
                         </ForecastTodaysTemperature>
-                        <ForecastPeriodOfDayInfo>
-                            <span>
-                                Morning:{' '}
-                                {convertTemp(temperatureUnit, today.temp.morn)}{' '}
-                                {temperatureUnit}
-                            </span>
-                            <br />
-                            <span>
-                                Day:{' '}
-                                {convertTemp(temperatureUnit, today.temp.day)}{' '}
-                                {temperatureUnit}
-                            </span>
-                            <br />
-                            <span>
-                                Evening:{' '}
-                                {convertTemp(temperatureUnit, today.temp.eve)}{' '}
-                                {temperatureUnit}
-                            </span>
-                            <br />
-                            <span>
-                                Night:{convertTemp(
-                                    temperatureUnit,
-                                    today.temp.night
-                                )}{' '}
-                                {temperatureUnit}
-                            </span>
-                        </ForecastPeriodOfDayInfo>
-                    </div>
-
+                        <ForecastTemperatureUnit>
+                            {temperatureUnit}
+                        </ForecastTemperatureUnit>
+                    </ForecastTodaysTemperature>
+                    <ForecastPeriodOfDayInfo>
+                        {this.renderTodaysTempInfo()}
+                    </ForecastPeriodOfDayInfo>
                     <ExtendedForecast>
                         <ExtendedForecastList>
-                            {list.map(
-                                (listItem, i) => (
-                                    <ExtendedForecastItem
-                                        key={i}
-                                        onClick={() =>
-                                            this.handleClick(listItem)
-                                        }
-                                    >
-                                        <div>{getDay(listItem.dt)}</div>
-                                        <img
-                                            style={{
-                                                height: 25,
-                                                width: 25,
-                                                padding: 5,
-                                            }}
-                                            src={require(`../../images/weather-icons/${
-                                                listItem.weather[0].icon
-                                            }.svg`)}
-                                            alt="Weather"
-                                        />{' '}
-                                        <br />
-                                        <span>
-                                            {listItem.temp.max}{' '}
-                                            {temperatureUnit}
-                                        </span>
-                                    </ExtendedForecastItem>
-                                )
-                                //  <DayItem onClick={() => this.handleClick(listItem)} key={listItem.dt} day={listItem} />
-                            )}
+                            {this.renderExtendedForecast()}
                         </ExtendedForecastList>
                     </ExtendedForecast>
                 </ForecastCard>
             </ForecastContainer>
         );
+    };
+
+    tryRenderForecast() {
+        if (this.state.forecastDataErrors) {
+            return this.renderError();
+        }
+
+        return this.renderForecastData();
+    }
+
+    render() {
+        return this.state.isLoading ? <Spinner /> : this.tryRenderForecast();
     }
 }
 
