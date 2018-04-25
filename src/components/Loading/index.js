@@ -1,5 +1,5 @@
 import React from 'react';
-import Spinner from './styled';
+import Spinner from '../shared/Spinner';
 
 const Loading = ({ isLoading, error }) => {
     // Handle the loading state
