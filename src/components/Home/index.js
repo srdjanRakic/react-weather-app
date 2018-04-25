@@ -39,14 +39,6 @@ class Home extends Component {
                         position.coords.longitude
                     }`,
                 });
-                this.setState(() => {
-                    return {
-                        location: {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                        },
-                    };
-                });
             },
             error => {
                 console.error(JSON.stringify(error));

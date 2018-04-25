@@ -5,8 +5,8 @@ export const LocationContainer = styled.div`
     flex-direction: column;
     box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.2);
     transition: 0.3s;
-    width: 40%;
-    height: 40%;
+    min-width: 40%;
+    min-height: 40%;
     display: flex;
     justify-content: center;
     align-items: center;
