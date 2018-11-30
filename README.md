@@ -1,4 +1,4 @@
-# React Weather
+# React Weather App
 
 Weather app built with React.
 
